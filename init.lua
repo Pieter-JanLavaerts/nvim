@@ -1,3 +1,5 @@
+vim.wo.relativenumber = true
+vim.g.mouse = 'a'
 vim.keymap.set({'n', 'v'}, 'gc', "<cmd>noh<CR>", {})
 vim.keymap.set({'n', 'v'}, 'gC', "<cmd>let @*=expand(\"%\")<CR>", {})
 vim.api.nvim_create_autocmd('LspAttach', {
