@@ -1,4 +1,5 @@
 vim.keymap.set({'n', 'v'}, 'gc', "<cmd>noh<CR>", {})
+vim.keymap.set({'n', 'v'}, 'gC', "<cmd>let @*=expand(\"%\")<CR>", {})
 vim.api.nvim_create_autocmd('LspAttach', {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
