@@ -1,3 +1,5 @@
+require('plugins')
+
 vim.o.cmdheight = 0
 vim.opt.clipboard:append('unnamedplus')
 vim.g.mapleader = " "
@@ -33,3 +35,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set({'n', 'v'}, '<leader>e', vim.diagnostic.open_float, { buffer = args.buf })
 	end
 })
+
+require('plugins_config')
