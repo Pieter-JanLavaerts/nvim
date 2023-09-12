@@ -12,5 +12,5 @@ vim.lsp.start({
 	},
 	root_dir = project_dir,
 	single_file_support = true,
-	settings = { Lua = { telemetry = { enable = false } } }
+	settings = { Lua = { telemetry = { enable = false }, diagnostics = { globals = {'vim'} }}}
 })

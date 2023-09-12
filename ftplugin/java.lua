@@ -1,7 +1,7 @@
 vim.lsp.set_log_level('debug')
-project_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1])
-project_name = vim.fs.basename(project_dir)
-lombok_location = vim.fs.normalize('~/.config/nvim/lombok.jar')
+local project_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw', 'build.gradle'}, { upward = true })[1])
+local project_name = vim.fs.basename(project_dir)
+local lombok_location = vim.fs.normalize('~/.config/nvim/lombok.jar')
 vim.lsp.start({
 	name = 'jdtls',
 	cmd = { 
