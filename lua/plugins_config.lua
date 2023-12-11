@@ -8,13 +8,38 @@ lualine.setup(lualine_config)
 
 require('telescope').setup({
 	defaults = {
+		layout_config = {
+			horizontal = {
+				width = 0.99,
+				preview_width = 90
+			}
+		},
 		path_display={'truncate'},
-		extensions = {
-			file_browser = {
-				theme = 'gruvbox',
-				-- disables netrw and use telescope-file-browser in its place
-				hijack_netrw = true
-			},
+	},
+	extensions = {
+		file_browser = {
+			initial_mode = 'normal',
+			-- theme = 'gruvbox',
+			-- disables netrw and use telescope-file-browser in its place
+			-- hijack_netrw = true,
+			display_stat = false
+		},
+	},
+	pickers = {
+		buffers = {
+			initial_mode = 'normal',
+			ignore_current_buffer = true,
+			sort_mru = true,
+			mappings = {
+				n = {
+					['d'] = require('telescope.actions').delete_buffer
+				}
+			}
+		}
+	},
+	mappings = {
+		n = {
+			['e'] = require('telescope.actions').close
 		}
 	}
 })
@@ -95,22 +120,25 @@ local harpoon_ui = require("harpoon.ui")
 require('telescope').load_extension('harpoon')
 
 local wk = require('which-key')
-
 wk.register({
-  f = {
+  t = {
     name = 'Telescope',
     f = { telescope_builtin.find_files, 'Find File' },
+    t = { telescope_builtin.find_files, 'Find File' },
     -- F = { function() telescope_builtin.find_files({ cwd = telescope_utils.buffer_dir() }) end, 'Find File from buffer dir'},
     g = { telescope_builtin.live_grep, 'Grep' },
     b = { telescope_builtin.buffers, 'Buffers' },
     h = { telescope_builtin.help_tags, 'Help tags' },
     c = { telescope.extensions.neoclip.default, 'Clipboard manager' },
-    e = { ':Telescope harpoon marks<CR>' , 'Harpoon' },
-    d = { ':Telescope file_browser path=%:p:h select_buffer=true<CR>', 'File browser %' },
-    D = { ':Telescope file_browser<CR>', 'File browser .' },
+    n = { telescope.extensions.neoclip.default, 'Clipboard manager' },
+    e = { ':Telescope harpoon marks initial_mode=normal<CR>' , 'Harpoon' },
+    d = { ':Telescope file_browser path=%:p:h select_buffer=true initial_mode=normal<CR>', 'File browser %' },
+    D = { ':Telescope file_browser initial_mode=normal<CR>', 'File browser initial_mode=normal<CR>' },
   },
-  w = { '<cmd>HopWord<CR>', 'Hop word'},
-  F = { '<cmd>HopChar1<CR>', 'Hop char'},
+  o = { '<cmd>HopWord<CR>', 'Hop word'},
+  w = { '<C-w>', 'C-w'},
+  v = { ':sh<CR>', 'vis'},
+  H = { ':WhichKey<CR>', 'Which key'},
   h = {
     name = 'Harpoon',
     m = { harpoon_mark.add_file, 'Mark file' },
@@ -135,3 +163,37 @@ vim.keymap.set({"i", "s"}, "<C-e>", function()
 		ls.change_choice(1)
 	end
 end, {silent = true})
+
+local cmp = require('cmp')
+
+cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      -- { name = 'vsnip' }, -- For vsnip users.
+      { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })

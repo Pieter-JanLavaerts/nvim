@@ -2,6 +2,8 @@ require('plugins')
 
 vim.o.cmdheight = 0
 vim.opt.clipboard:append('unnamedplus')
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 vim.g.mapleader = " "
 vim.wo.relativenumber = true
 vim.g.mouse = 'a'
@@ -36,7 +38,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		if client.server_capabilities.declarationProvider then
 			vim.keymap.set({'n', 'v'}, 'gD', vim.lsp.buf.declaration, { buffer = args.buf }, {desc = 'Lsp goto declaration'})
 		end
-		vim.keymap.set({'n', 'v'}, '<leader>e', vim.diagnostic.open_float, { buffer = args.buf }, {desc = 'diagnostics'})
+		vim.keymap.set({'n', 'v'}, '<leader>e', vim.diagnostic.open_float, { buffer = args.buf, desc = 'diagnostics'})
 	end
 })
 

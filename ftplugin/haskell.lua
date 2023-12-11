@@ -5,7 +5,7 @@ vim.o.shiftwidth = 4 -- Number of spaces inserted when indenting
 
 vim.bo.expandtab = true
 vim.lsp.set_log_level('debug')
-project_dir = vim.fs.dirname(vim.fs.find(function(name, path)
+local project_dir = vim.fs.dirname(vim.fs.find(function(name, path)
 	return name:match('.*~.cabal$') or name == 'stack.yaml'
 end, { upward = true })[1])
 vim.lsp.start({
